@@ -253,6 +253,18 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [SELECT_NAME_FROM_GROUP].Migracion_Dimension_Tiempo AS
+BEGIN
+	INSERT INTO [SELECT_NAME_FROM_GROUP].Dimension_Tiempo (AÑO, CUATRIMESTRE)
+	SELECT DISTINCT YEAR(C.CARRERA_FECHA), (CASE
+												WHEN MONTH(C.CARRERA_FECHA) IN (1,2,3,4) THEN 1
+												WHEN MONTH(C.CARRERA_FECHA) IN (5,6,7,8) THEN 2
+												ELSE 3
+											END)
+	FROM [SELECT_NAME_FROM_GROUP].Carrera AS C
+END
+GO
+
 -- Ejecucion de la migracion
 
 BEGIN TRANSACTION
@@ -262,6 +274,7 @@ BEGIN TRY
 	EXECUTE [SELECT_NAME_FROM_GROUP].Migracion_Dimension_Auto
 	EXECUTE [SELECT_NAME_FROM_GROUP].Migracion_Dimension_Tipo_Sector
 	EXECUTE [SELECT_NAME_FROM_GROUP].Migracion_Dimension_Circuito
+	EXECUTE [SELECT_NAME_FROM_GROUP].Migracion_Dimension_Tiempo
 END TRY
 BEGIN CATCH
 	ROLLBACK TRANSACTION;
@@ -276,7 +289,8 @@ SELECT * FROM [SELECT_NAME_FROM_GROUP].Dimension_Piloto
 SELECT * FROM [SELECT_NAME_FROM_GROUP].Dimension_Escuderia 
 SELECT * FROM [SELECT_NAME_FROM_GROUP].Dimension_Auto
 SELECT * FROM [SELECT_NAME_FROM_GROUP].Dimension_Tipo_Sector
-SELECT * FROM [SELECT_NAME_FROM_GROUP].Dimension_Circuito 
+SELECT * FROM [SELECT_NAME_FROM_GROUP].Dimension_Circuito
+SELECT * FROM [SELECT_NAME_FROM_GROUP].Dimension_Tiempo  
 
 -- Creacion de vistas
 -- Consultas para mostrar los items pedidos
