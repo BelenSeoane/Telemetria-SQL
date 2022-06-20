@@ -371,5 +371,52 @@ SELECT * FROM [SELECT_NAME_FROM_GROUP].Hechos_Incidente
 SELECT * FROM [SELECT_NAME_FROM_GROUP].Hechos_Parada_Box
 SELECT * FROM [SELECT_NAME_FROM_GROUP].Hechos_Medicion
 
+-- Drop vistas
+IF OBJECT_ID('[SELECT_NAME_FROM_GROUP].Vista_Desgaste', 'V') IS NOT NULL
+	DROP VIEW [SELECT_NAME_FROM_GROUP].Vista_Desgaste;
+GO
+
+IF OBJECT_ID('[SELECT_NAME_FROM_GROUP].Vista_Mejor_Tiempo_Vuelta', 'V') IS NOT NULL
+	DROP VIEW [SELECT_NAME_FROM_GROUP].Vista_Mejor_Tiempo_Vuelta;
+GO
+
+IF OBJECT_ID('[SELECT_NAME_FROM_GROUP].Vista_Mayor_Consumo_Combustible', 'V') IS NOT NULL
+	DROP VIEW [SELECT_NAME_FROM_GROUP].Vista_Mayor_Consumo_Combustible;
+GO
+
+IF OBJECT_ID('[SELECT_NAME_FROM_GROUP].Vista_Max_Velocidad', 'V') IS NOT NULL
+	DROP VIEW [SELECT_NAME_FROM_GROUP].Vista_Max_Velocidad;
+GO
+
+IF OBJECT_ID('[SELECT_NAME_FROM_GROUP].Vista_Tiempo_Paradas', 'V') IS NOT NULL
+	DROP VIEW [SELECT_NAME_FROM_GROUP].Vista_Tiempo_Paradas;
+GO
+
+IF OBJECT_ID('[SELECT_NAME_FROM_GROUP].Vista_Cantidad_Paradas', 'V') IS NOT NULL
+	DROP VIEW [SELECT_NAME_FROM_GROUP].Vista_Cantidad_Paradas;
+GO
+
+IF OBJECT_ID('[SELECT_NAME_FROM_GROUP].Vista_Circuitos_Con_Mayor_Tiempo_Paradas', 'V') IS NOT NULL
+	DROP VIEW [SELECT_NAME_FROM_GROUP].Vista_Circuitos_Con_Mayor_Tiempo_Paradas;
+GO
+
+IF OBJECT_ID('[SELECT_NAME_FROM_GROUP].Vista_Mas_Peligrosos', 'V') IS NOT NULL
+	DROP VIEW [SELECT_NAME_FROM_GROUP].Vista_Mas_Peligrosos;
+GO
+
+IF OBJECT_ID('[SELECT_NAME_FROM_GROUP].Vista_Promedio_Incidentes', 'V') IS NOT NULL
+	DROP VIEW [SELECT_NAME_FROM_GROUP].Vista_Promedio_Incidentes;
+GO
+
+
 -- Creacion de vistas
+
+CREATE VIEW [SELECT_NAME_FROM_GROUP].Vista_Circuitos_Con_Mayor_Tiempo_Paradas AS
+SELECT TOP 3 H.CIRCUITO_ID
+FROM [SELECT_NAME_FROM_GROUP].Hechos_Parada_Box AS H
+GROUP BY H.CIRCUITO_ID
+ORDER BY SUM(H.PARADA_BOX_TIEMPO) DESC
+GO
+
 -- Consultas para mostrar los items pedidos
+SELECT * FROM [SELECT_NAME_FROM_GROUP].Vista_Circuitos_Con_Mayor_Tiempo_Paradas
